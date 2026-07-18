@@ -15,6 +15,7 @@ class Book(Base):
     category_id = Column(Integer, ForeignKey("categories.id"))
     created_at = Column(DateTime, default=datetime.utcnow)
 
+
     reviews = relationship("Review", back_populates="book")
     category = relationship("Category", back_populates="books")
     loans = relationship("Loan", back_populates="book")

@@ -14,5 +14,6 @@ class User(Base):
     is_verified = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
+
     loans = relationship("Loan", back_populates="user")
     reviews = relationship("Review", back_populates="user")
