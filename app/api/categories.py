@@ -3,19 +3,16 @@ from sqlalchemy.orm import Session
 from app.core.security import require_roles
 from app.database.database import get_db
 from app.models.category import Category
-from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate, MessageResponse
+from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate
+from app.schemas.user import MessageResponse
 
 
-router = APIRouter(prefix="/categories", tags=["Categories"]
+router = APIRouter(prefix="/categories", tags=["Categories"])
 
 
-@router.get(
-    "/",
-    response_model=list[CategoryResponse],
-)
-def get_categories(
-    db: Session = Depends(get_db),
-):
+@router.get("/", response_model=list[CategoryResponse])
+def get_categories( db: Session = Depends(get_db)):
+
     return db.query(Category).all()
 
 

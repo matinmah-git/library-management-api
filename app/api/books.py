@@ -4,6 +4,7 @@ from app.core.security import require_roles
 from app.models.book import Book
 from app.models.user import User
 from app.schemas.book import BookCreate, BookUpdate, BookResponse
+from app.schemas.user import MessageResponse
 from app.database.database import get_db
 router = APIRouter(prefix="/books", tags=["books"])
 
@@ -51,7 +52,7 @@ def update_book(book_id: int, book_data: BookUpdate, db: Session = Depends(get_d
 
     return book
 
-@router.delete("/{book_id}")
+@router.delete("/{book_id}", response_model=MessageResponse)
 def delete_book(book_id: int, db: Session = Depends(get_db), current_user: User = Depends(require_roles("admin"))):
 
     book = db.query(Book).filter(Book.id == book_id).first()
@@ -61,4 +62,4 @@ def delete_book(book_id: int, db: Session = Depends(get_db), current_user: User 
     db.delete(book)
     db.commit()
 
-    return {"message": "Book deleted successfully"}
+    return MessageResponse(message = "Book deleted successfully")
