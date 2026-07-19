@@ -33,7 +33,7 @@ def borrow_book(loan_data: LoanCreate, db: Session = Depends(get_db), current_us
     if existing_book:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="You already borrowed this book")
 
-    new_loan = Loan(user_id=current_user.id, book_id=loan_data.book_id, due_date=loan_data.due_day)
+    new_loan = Loan(user_id=current_user.id, book_id=loan_data.book_id, due_date=loan_data.due_date)
 
     book.available_copies -= 1
 
