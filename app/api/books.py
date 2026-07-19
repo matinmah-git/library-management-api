@@ -14,7 +14,7 @@ def get_books(db:Session = Depends(get_db)):
     return books
 
 
-@router.get("/{book_id}", response_model=BookResponse):
+@router.get("/{book_id}", response_model=BookResponse)
 def get_book(book_id: int, db:Session = Depends(get_db)):
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
