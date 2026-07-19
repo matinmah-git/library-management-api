@@ -17,3 +17,4 @@ class Loan(Base):
     user = relationship("User", back_populates="loans")
     book = relationship("Book", back_populates="loans")
 
+
