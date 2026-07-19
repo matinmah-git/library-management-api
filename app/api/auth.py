@@ -9,7 +9,7 @@ from app.core.security import hash_password, verify_password, create_access_toke
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", response_model=MessageResponse , status_code=status.HTTP_201_CREATED)
-def register(user_data = UserCreate , db:Session = Depends(get_db)):
+def register(user_data: UserCreate , db:Session = Depends(get_db)):
 
     if db.query(User).filter(User.username == user_data.username).first():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="Username already exists")
