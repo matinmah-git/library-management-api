@@ -18,11 +18,11 @@ def get_reviews(db: Session = Depends(get_db)):
 def get_book_review(book_id: int, db: Session = Depends(get_db)):
     return db.query(Review).filter(Review.book_id == book_id).first()
 
-@router.post("/", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED_OK)
+@router.post("/", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED)
 def create_review(review_data: ReviewCreate, db: Session = Depends(get_db), current_user: User = Depends(current_user)):
 
-    if db.query(Book).filter(Book.id == review_data.book_id).first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND_CONFLICT, detail="Book not found")
+    if not db.query(Book).filter(Book.id == review_data.book_id).first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
     if db.query(Review).filter(Review.user_id == current_user.id, Review.book_id == review_data.book_id).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="You have already reviewed this book")
 
@@ -33,7 +33,6 @@ def create_review(review_data: ReviewCreate, db: Session = Depends(get_db), curr
     db.refresh(review)
 
     return review
-
 @router.put("/{review_id}", response_model=ReviewResponse)
 def update_review(review_data: ReviewUpdate, review_id: int, db: Session = Depends(get_db), current_user: User = Depends(current_user)):
 
