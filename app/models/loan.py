@@ -10,7 +10,7 @@ class Loan(Base):
     book_id = Column(Integer, ForeignKey("books.id"), nullable=False)
     borrow_date = Column(DateTime, default=datetime.utcnow)
     due_date = Column(DateTime, nullable=False)
-    return_date = Column(DateTime, nullable=False)
+    return_date = Column(DateTime, nullable=True)
     returned = Column(Boolean, default=False)
 
 
