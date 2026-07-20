@@ -16,7 +16,13 @@ def get_reviews(db: Session = Depends(get_db)):
 
 @router.get("/{book_id}", response_model=ReviewResponse)
 def get_book_review(book_id: int, db: Session = Depends(get_db)):
-    return db.query(Review).filter(Review.book_id == book_id).first()
+    reviews = db.query(Review).filter(Review.book_id == book_id).first()
+    book = db.query(Book).filter(Book.id == book_id).first()
+    if not book:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
+    if not reviews:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No reviews found")
+    return reviews
 
 @router.post("/", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED)
 def create_review(review_data: ReviewCreate, db: Session = Depends(get_db), current_user: User = Depends(current_user)):
