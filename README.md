@@ -1,6 +1,6 @@
 # 📚 Library Management API
 
-A modern **Library Management REST API** built with **FastAPI**, **SQLAlchemy**, and **JWT Authentication**. This project demonstrates backend development best practices including authentication, authorization, CRUD operations, pagination, searching, filtering, and role-based access control.
+A modern **Library Management REST API** built with **FastAPI**, **SQLAlchemy**, and **JWT Authentication**. This project demonstrates backend development tasks including authentication, authorization, CRUD operations, pagination, searching, filtering, and role-based access control.
 
 ---
 
