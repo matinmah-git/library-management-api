@@ -10,7 +10,7 @@ class Review(Base):
     book_id = Column(Integer, ForeignKey("books.id"), nullable=False)
     comment = Column(String)
     rating = Column(Integer, nullable=False)
-    create_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
     user = relationship("User", back_populates="reviews")

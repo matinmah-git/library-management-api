@@ -19,3 +19,4 @@ class Book(Base):
     reviews = relationship("Review", back_populates="book")
     category = relationship("Category", back_populates="books")
     loans = relationship("Loan", back_populates="book")
+

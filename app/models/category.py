@@ -7,5 +7,4 @@ class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
     name =  Column(String, nullable=False, unique=True, index=True)
 
-
     books = relationship("Book", back_populates="category")
