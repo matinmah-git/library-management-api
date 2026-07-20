@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
+from typing import Optional
 from app.core.security import require_roles
 from app.models.book import Book
 from app.models.user import User
@@ -9,8 +11,61 @@ from app.database.database import get_db
 router = APIRouter(prefix="/books", tags=["books"])
 
 @router.get("/", response_model=list[BookResponse])
-def get_books(db:Session = Depends(get_db)):
-    books = db.query(Book).all()
+def get_books(
+    page: int = Query(1, ge=1),
+    size: int = Query(10, ge=1, le=100),
+    search: Optional[str] = None,
+    category_id: Optional[int] = None,
+    available: Optional[bool] = None,
+    author: Optional[str] = None,
+    title: Optional[str] = None,
+    sort: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+
+    query = db.query(Book)
+
+    if search:
+        query = query.filter(
+            or_(
+                Book.title.ilike(f"%{search}%"),
+                Book.author.ilike(f"%{search}%"),
+                Book.isbn.ilike(f"%{search}%"),
+            )
+        )
+
+    if category_id:
+        query = query.filter(Book.category_id == category_id)
+    if available:
+        query = query.filter(Book.available_copies > 0)
+    if available is False:
+        query = query.filter(Book.available_copies == 0)
+    if author:
+        query = query.filter(Book.author.ilike(f"%{author}%"))
+    if title:
+        query = query.filter(Book.title.ilike(f"%{title}"))
+
+    if sort == "title":
+        query = query.order_by(Book.title)
+
+    elif sort == "-title":
+        query = query.order_by(Book.title.desc())
+
+    elif sort == "author":
+        query = query.order_by(Book.author)
+
+    elif sort == "-author":
+        query = query.order_by(Book.author.desc())
+
+    elif sort == "created_at":
+        query = query.order_by(Book.created_at)
+
+    elif sort == "-created_at":
+        query = query.order_by(Book.created_at.desc())
+
+
+    books = query.offset((page - 1) * size).limit(size).all()
+
     return books
 
 
