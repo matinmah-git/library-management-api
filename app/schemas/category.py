@@ -7,7 +7,7 @@ class CategoryUpdate(BaseModel):
     name: str | None=None
 
 class CategoryResponse(BaseModel):
-    id: str
+    id: int
     name: str
 
     model_config = ConfigDict(from_attributes=True)
