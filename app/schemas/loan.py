@@ -4,14 +4,14 @@ from pydantic import BaseModel, ConfigDict
 
 class LoanCreate(BaseModel):
     book_id: int
-    due_day: datetime
+    due_date: datetime
 
 class LoanResponse(BaseModel):
-    id: str
+    id: int
     user_id: int
     book_id: int
     borrow_date: datetime
-    due_day: datetime
+    due_date: datetime
     return_date: datetime | None
     returned: bool
 
